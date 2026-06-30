@@ -570,8 +570,8 @@
       <button class="btn ghost" id="editVideos">Set lesson videos (YouTube Kids)</button>
 
       <div class="sec-title" style="font-size:16px;color:var(--red)">⚠️ Reset (parents only)</div>
-      <button class="btn ghost danger" id="resetPoints">↺ Reset points to ${ECONOMY.currencySymbol}0</button>
-      <button class="btn ghost danger" id="resetAll">⚠️ Reset all progress</button>
+      <button class="btn ghost danger" id="resetPoints">↺ Reset points to 0</button>
+      <button class="btn ghost danger" id="resetAll">⚠️ Reset everything (start over)</button>
 
       <button class="btn" id="closeP">Done</button>
     `);
@@ -585,7 +585,7 @@
       const ok = document.createElement("button"); ok.className = "btn green small"; ok.textContent = "Approve";
       const no = document.createElement("button"); no.className = "btn ghost small"; no.textContent = "Decline";
       ok.onclick = () => { r.status = "approved"; save(); toast("Approved! 🎉"); ov.remove(); openParentPanel(); };
-      no.onclick = () => { r.status = "declined"; state.pesos += r.cost; save(); toast("Declined — pesos returned."); ov.remove(); openParentPanel(); };
+      no.onclick = () => { r.status = "declined"; state.pesos += r.cost; save(); toast("Declined — points returned."); ov.remove(); openParentPanel(); };
       row.appendChild(ok); row.appendChild(no);
       reqs.appendChild(row);
     });
@@ -618,10 +618,10 @@
     const code = familyCode();
     const label = code ? "family code" : "parent PIN";
     const ov = overlay(`
-      <h2>${scope === "all" ? "Reset all progress" : "Reset points"}</h2>
+      <h2>${scope === "all" ? "Reset everything" : "Reset points"}</h2>
       <p class="tiny">${scope === "all"
-        ? "This clears pesos, finished lessons, badges, streaks and reward requests. Her name and Saint Buddy are kept."
-        : "This sets her pesos back to " + ECONOMY.currencySymbol + "0 and clears any waiting reward requests."}
+        ? "This erases EVERYTHING — her name, Saint Buddy, points, finished lessons, badges, streaks, reward requests and custom rewards — and starts the app over from the very beginning."
+        : "This sets her points back to 0 and clears any waiting reward requests."}
         <br><b>This cannot be undone.</b></p>
       <div class="field"><label>Type your ${label} to confirm</label>
         <input id="rcode" autocomplete="off" placeholder="Enter ${label}"/></div>
@@ -648,9 +648,8 @@
     save();
   }
   function doResetAll() {
-    const keep = { name: state.name, buddy: state.buddy, rewards: state.rewards,
-                   parentPin: state.parentPin, videos: state.videos };
-    state = Object.assign(DEFAULT_STATE(), keep);
+    // Total reset: wipe everything back to a brand-new app (returns to welcome).
+    state = DEFAULT_STATE();
     save();
   }
 

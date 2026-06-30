@@ -13,9 +13,9 @@
    ========================================================================== */
 
 const ECONOMY = {
-  currencySymbol: "₱",
-  currencyName: "pesos",
-  weeklyTarget: 300,       // pesos/week goal she's aiming for
+  currencySymbol: "⭐",     // in-app points are symbolic stars (NOT real pesos)
+  currencyName: "Grace Points",
+  weeklyTarget: 300,       // points/week goal she's aiming for
   totalWeeks: 40,
   lessonComplete: 25,      // for finishing a lesson
   perCorrect: 15,          // per correct quiz answer
