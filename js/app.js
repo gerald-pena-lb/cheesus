@@ -96,8 +96,16 @@
   /* ============================================================
      RENDER
      ============================================================ */
+  function applyTheme() {
+    const root = document.documentElement;
+    const t = state.buddy ? getSaint(state.buddy).theme : null;
+    if (t) { root.style.setProperty("--purple", t.c); root.style.setProperty("--purple-d", t.d); }
+    else { root.style.removeProperty("--purple"); root.style.removeProperty("--purple-d"); }
+  }
+
   function render() {
     rollWeek();
+    applyTheme();
     if (!state.name) return renderWelcome();
     const body = {
       home: renderHome, lesson: renderLesson, quiz: renderQuiz,
@@ -560,6 +568,11 @@
       <div class="sec-title" style="font-size:16px">Settings</div>
       <button class="btn ghost" id="changePin">Change PIN</button>
       <button class="btn ghost" id="editVideos">Set lesson videos (YouTube Kids)</button>
+
+      <div class="sec-title" style="font-size:16px;color:var(--red)">⚠️ Reset (parents only)</div>
+      <button class="btn ghost danger" id="resetPoints">↺ Reset points to ${ECONOMY.currencySymbol}0</button>
+      <button class="btn ghost danger" id="resetAll">⚠️ Reset all progress</button>
+
       <button class="btn" id="closeP">Done</button>
     `);
     // pending requests
@@ -593,7 +606,52 @@
     ov.querySelector("#addReward").onclick = () => addRewardDialog(() => { ov.remove(); openParentPanel(); });
     ov.querySelector("#changePin").onclick = () => changePinDialog();
     ov.querySelector("#editVideos").onclick = () => { ov.remove(); editVideosDialog(); };
+    ov.querySelector("#resetPoints").onclick = () => resetDialog("points");
+    ov.querySelector("#resetAll").onclick = () => resetDialog("all");
     ov.querySelector("#closeP").onclick = () => { ov.remove(); render(); };
+  }
+
+  /* -------------------- reset (family-code protected) -------------------- */
+  function familyCode() { return (window.CHEESUS_CONFIG && window.CHEESUS_CONFIG.FAMILY_CODE) || ""; }
+
+  function resetDialog(scope) {
+    const code = familyCode();
+    const label = code ? "family code" : "parent PIN";
+    const ov = overlay(`
+      <h2>${scope === "all" ? "Reset all progress" : "Reset points"}</h2>
+      <p class="tiny">${scope === "all"
+        ? "This clears pesos, finished lessons, badges, streaks and reward requests. Her name and Saint Buddy are kept."
+        : "This sets her pesos back to " + ECONOMY.currencySymbol + "0 and clears any waiting reward requests."}
+        <br><b>This cannot be undone.</b></p>
+      <div class="field"><label>Type your ${label} to confirm</label>
+        <input id="rcode" autocomplete="off" placeholder="Enter ${label}"/></div>
+      <button class="btn danger" id="rconfirm">Reset now</button>
+      <button class="btn ghost" id="rcancel">Cancel</button>
+    `);
+    ov.querySelector("#rcancel").onclick = () => ov.remove();
+    ov.querySelector("#rconfirm").onclick = () => {
+      const v = ov.querySelector("#rcode").value.trim();
+      const expected = code || state.parentPin;
+      if (!v || v !== expected) { toast(`That ${label} is incorrect 🔒`); return; }
+      if (scope === "all") doResetAll(); else doResetPoints();
+      document.querySelectorAll(".overlay").forEach(o => o.remove());
+      render();
+      toast(scope === "all" ? "All progress has been reset." : `Points reset to ${ECONOMY.currencySymbol}0.`);
+    };
+    ov.querySelector("#rcode").focus();
+  }
+
+  function doResetPoints() {
+    state.pesos = 0;
+    state.week.earned = 0;
+    state.requests = state.requests.filter(r => r.status !== "pending");
+    save();
+  }
+  function doResetAll() {
+    const keep = { name: state.name, buddy: state.buddy, rewards: state.rewards,
+                   parentPin: state.parentPin, videos: state.videos };
+    state = Object.assign(DEFAULT_STATE(), keep);
+    save();
   }
 
   function addRewardDialog(after) {

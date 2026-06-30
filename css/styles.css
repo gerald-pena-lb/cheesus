@@ -113,6 +113,11 @@ h1,h2,h3{ margin:0; line-height:1.15; }
 .scene-sunrise{ background:linear-gradient(160deg,#fb7185,#fbbf24); }
 .scene-forest{ background:linear-gradient(160deg,#16a34a,#65a30d); }
 .scene-royal{ background:linear-gradient(160deg,#7c3aed,#db2777); }
+.scene-marian{ background:linear-gradient(160deg,#5b8def,#a7c5ff); }
+.scene-rose{ background:linear-gradient(160deg,#ff7eb6,#c44d76); }
+.scene-gold{ background:linear-gradient(160deg,#f4b400,#e07b00); }
+.scene-dusk{ background:linear-gradient(160deg,#6d28d9,#2563eb); }
+.scene-deep{ background:linear-gradient(160deg,#0f766e,#0e7490); }
 
 /* ---------- Cards / reads ---------- */
 .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-top:14px; }
@@ -140,6 +145,8 @@ h1,h2,h3{ margin:0; line-height:1.15; }
 .btn.gold{ background:linear-gradient(180deg,var(--gold),var(--gold-d)); color:#5a3d00; }
 .btn.green{ background:linear-gradient(180deg,var(--green),var(--green-d)); }
 .btn.ghost{ background:#fff; color:var(--purple-d); border:2px solid var(--line); box-shadow:none; }
+.btn.danger{ color:var(--red); border-color:#f3c2c2; }
+.btn.danger:not(.ghost){ background:linear-gradient(180deg,#ef4444,#b91c1c); color:#fff; border:none; }
 .btn.small{ width:auto; padding:10px 16px; font-size:14px; display:inline-block; }
 .backbtn{ background:#fff; color:var(--purple-d); border-radius:14px; padding:10px 14px; font-weight:900; box-shadow:var(--shadow); }
 

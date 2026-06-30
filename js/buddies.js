@@ -5,57 +5,57 @@
    Chibi avatars are drawn as inline SVG (no images, no licensing, offline).
    ========================================================================== */
 const SAINTS = [
-  { id:"carlo", name:"St. Carlo", full:"St. Carlo Acutis", title:"Patron of Gamers", feast:"Oct 12",
+  { id:"carlo", theme:{c:"#e11d48",d:"#9f1239"}, name:"St. Carlo", full:"St. Carlo Acutis", title:"Patron of Gamers", feast:"Oct 12",
     personality:"A modern teen who loved video games and computers — and loved Jesus most of all. He called the Eucharist his “highway to Heaven.”",
     cheers:["Level up your faith! 🎮","New high score!","You're leveling up!","Keep going, that was epic!"],
     look:{skin:"#f1bd95", robe:"#e63946", trim:"#ffffff", head:"hair", hair:"#3a2a1a"}, attr:"🎮", motif:"playful" },
 
-  { id:"francis", name:"St. Francis", full:"St. Francis of Assisi", title:"Friend of Animals", feast:"Oct 4",
+  { id:"francis", theme:{c:"#5f8a3a",d:"#456628"}, name:"St. Francis", full:"St. Francis of Assisi", title:"Friend of Animals", feast:"Oct 4",
     personality:"Gentle and joyful, St. Francis loved every creature great and small and called the sun his brother.",
     cheers:["The animals say hello! 🐦","Peace and all good!","God shines in every sunrise!","Beautifully done!"],
     look:{skin:"#f3c19a", robe:"#8a5a2b", trim:"#6b4421", head:"hood", beard:"#6b4a2b"}, attr:"🐦", motif:"gentle" },
 
-  { id:"therese", name:"St. Thérèse", full:"St. Thérèse of Lisieux", title:"The Little Flower", feast:"Oct 1",
+  { id:"therese", theme:{c:"#d6608f",d:"#a83b69"}, name:"St. Thérèse", full:"St. Thérèse of Lisieux", title:"The Little Flower", feast:"Oct 1",
     personality:"Sweet and humble, she taught us to do small things with great love.",
     cheers:["I'll send you a rose! 🌹","Small things, great love!","You're doing wonderfully!","So proud of you!"],
     look:{skin:"#f6caa6", robe:"#7a4a28", trim:"#e9dcc3", head:"veil", veil:"#3b2a1c"}, attr:"🌹", motif:"twinkle" },
 
-  { id:"joan", name:"St. Joan", full:"St. Joan of Arc", title:"The Brave Knight", feast:"May 30",
+  { id:"joan", theme:{c:"#4a73b8",d:"#33548c"}, name:"St. Joan", full:"St. Joan of Arc", title:"The Brave Knight", feast:"May 30",
     personality:"Fearless and faithful, St. Joan stood up bravely for what is right.",
     cheers:["Courage — onward! ⚔️","Be brave like a knight!","God gives us strength!","Victory!"],
     look:{skin:"#f3c19a", robe:"#9aa3ad", trim:"#6c757d", head:"helmet", hair:"#caa46a"}, attr:"⚔️", motif:"fanfare" },
 
-  { id:"george", name:"St. George", full:"St. George", title:"The Dragon Slayer", feast:"Apr 23",
+  { id:"george", theme:{c:"#d65a5a",d:"#a83b3b"}, name:"St. George", full:"St. George", title:"The Dragon Slayer", feast:"Apr 23",
     personality:"Bold and brave, St. George never backed down from doing good.",
     cheers:["Slay your fears! 🐉","Be a hero today!","Stand tall and true!","Mighty work!"],
     look:{skin:"#e8b48c", robe:"#d65a5a", trim:"#9aa3ad", head:"helmet", hair:"#3a2a1a"}, attr:"🐉", motif:"fanfare" },
 
-  { id:"nicholas", name:"St. Nicholas", full:"St. Nicholas of Myra", title:"The Gift Giver", feast:"Dec 6",
+  { id:"nicholas", theme:{c:"#c0392b",d:"#8f271c"}, name:"St. Nicholas", full:"St. Nicholas of Myra", title:"The Gift Giver", feast:"Dec 6",
     personality:"Kind and generous — the holy bishop who became the real Santa Claus!",
     cheers:["A gift for you! 🎁","Give, and you'll receive!","Joy to you!","Wonderful!"],
     look:{skin:"#f1bd95", robe:"#c0392b", trim:"#f4d35e", head:"mitre", beard:"#ffffff"}, attr:"🎁", motif:"playful" },
 
-  { id:"clare", name:"St. Clare", full:"St. Clare of Assisi", title:"The Peaceful Light", feast:"Aug 11",
+  { id:"clare", theme:{c:"#6f7b96",d:"#525c73"}, name:"St. Clare", full:"St. Clare of Assisi", title:"The Peaceful Light", feast:"Aug 11",
     personality:"Calm and prayerful, St. Clare trusted God in everything.",
     cheers:["Shine God's light! ☀️","Stay peaceful and kind!","Beautiful work!","Grace to you!"],
     look:{skin:"#f3c19a", robe:"#9a8f7a", trim:"#cabfa6", head:"veil", veil:"#5a5040"}, attr:"☀️", motif:"holy" },
 
-  { id:"lorenzo", name:"San Lorenzo", full:"St. Lorenzo Ruiz", title:"First Filipino Saint", feast:"Sep 28",
+  { id:"lorenzo", theme:{c:"#3a6ea5",d:"#28517a"}, name:"San Lorenzo", full:"St. Lorenzo Ruiz", title:"First Filipino Saint", feast:"Sep 28",
     personality:"A faithful family man from the Philippines who loved God to the very end.",
     cheers:["Mabuhay! Keep going! 📿","Faithful to the end!","Proud of you, kaibigan!","Galing!"],
     look:{skin:"#c98a52", robe:"#3a6ea5", trim:"#e9dcc3", head:"hair", hair:"#141414"}, attr:"📿", motif:"twinkle" },
 
-  { id:"pedro", name:"San Pedro", full:"St. Pedro Calungsod", title:"The Young Hero", feast:"Apr 2",
+  { id:"pedro", theme:{c:"#2e8b57",d:"#1f6640"}, name:"San Pedro", full:"St. Pedro Calungsod", title:"The Young Hero", feast:"Apr 2",
     personality:"A brave Filipino teenager who shared his faith with courage and joy.",
     cheers:["Young and brave! ✝️","Tara, let's learn!","You've got this!","Ang galing mo!"],
     look:{skin:"#c98a52", robe:"#2e8b57", trim:"#f4d35e", head:"hair", hair:"#141414"}, attr:"🌴", motif:"playful" },
 
-  { id:"pio", name:"Padre Pio", full:"St. Pio of Pietrelcina", title:"The Prayer Warrior", feast:"Sep 23",
+  { id:"pio", theme:{c:"#7a5530",d:"#54391f"}, name:"Padre Pio", full:"St. Pio of Pietrelcina", title:"The Prayer Warrior", feast:"Sep 23",
     personality:"A holy friar whose motto was: pray, hope, and don't worry.",
     cheers:["Pray, hope, don't worry!","Heaven is cheering for you!","Well done, little one!","Keep praying!"],
     look:{skin:"#e8b48c", robe:"#6b4a2b", trim:"#4a3320", head:"hood", beard:"#cfcfcf"}, attr:"🕊️", motif:"holy" },
 
-  { id:"mary", name:"Mama Mary", full:"The Blessed Virgin Mary", title:"Mother of God", feast:"all year 💙",
+  { id:"mary", theme:{c:"#3b6fb6",d:"#2a5286"}, name:"Mama Mary", full:"The Blessed Virgin Mary", title:"Mother of God", feast:"all year 💙",
     personality:"The loving mother of Jesus — and our mother too. She always says yes to God.",
     cheers:["I'm praying for you! 💙","Do whatever He tells you.","My child, you shine!","I love you, anak!"],
     look:{skin:"#f6caa6", robe:"#3b6fb6", trim:"#ffffff", head:"veil", veil:"#dfe7f5"}, attr:"🌹", motif:"holy" },
