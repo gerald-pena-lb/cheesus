@@ -49,31 +49,41 @@ Open the Vercel link in **Safari** on the iPad → tap **Share** →
 
 ---
 
-## Part 3 — Connect the app to Supabase
+## Part 3 — Connect the app to Supabase (all inside Vercel — no code)
 
-You only need to fill in three values in **`js/config.js`**:
+You add three **Environment Variables** in the Vercel dashboard. That's it.
 
-```js
-window.CHEESUS_CONFIG = {
-  SUPABASE_URL: "https://abcdxyz.supabase.co",   // your Project URL
-  SUPABASE_ANON_KEY: "eyJhbGciOi...",            // your anon public key
-  FAMILY_CODE: "pena-family-2026",               // any secret word you choose
-};
-```
+1. In **Vercel → your `cheesus` project → Settings → Environment Variables**,
+   add these three (click **Add** for each):
 
-Two ways to do it:
+   | Name                | Value                                   |
+   |---------------------|-----------------------------------------|
+   | `SUPABASE_URL`      | your Project URL (`https://xxxx.supabase.co`) |
+   | `SUPABASE_ANON_KEY` | your **anon public** key (the long string)    |
+   | `FAMILY_CODE`       | any secret word you choose (e.g. `pena-family-2026`) |
 
-- **Let me do it:** paste me your Project URL + anon public key + a family code
-  in chat and I'll commit it for you. *(The anon key is meant to be public and
-  is safe to share — access is protected by Row-Level Security plus your secret
-  family code.)*
-- **Do it yourself on GitHub:** open `js/config.js` on github.com → click the
-  **pencil ✏️** → paste your values → **Commit changes**.
+   Leave the environment set to **All** (Production/Preview/Development).
+2. Go to the **Deployments** tab → open the latest deployment → **⋯ → Redeploy**
+   (so the new variables take effect).
 
-Either way, **Vercel automatically redeploys** within a few seconds. Now open
-the same link on the **iPad** and on **your phone** using the **same family
-code** — she earns on the iPad, and reward requests pop up for you to approve
-on your phone, live. ☁️
+That's the whole connection — **no files to edit, no terminal**. The app reads
+those variables automatically at `/api/config` when it loads.
+
+> 💡 Even easier (optional): in Vercel, open the **Integrations / Marketplace**
+> and add the **Supabase** integration — it can create/link the project and fill
+> in `SUPABASE_URL` and `SUPABASE_ANON_KEY` for you automatically. You'd then
+> only add `FAMILY_CODE` yourself.
+
+Now open the same link on the **iPad** and on **your phone** using the **same
+family code** — she earns on the iPad, and reward requests pop up for you to
+approve on your phone, live. ☁️
+
+### How to get the two Supabase values (from Part 2)
+In Supabase → **Project Settings → API**:
+- **Project URL** → use for `SUPABASE_URL`
+- **Project API keys → `anon` `public`** → use for `SUPABASE_ANON_KEY`
+*(The anon key is meant to live in the browser; it's safe. Access is guarded by
+the database's Row-Level Security plus your secret family code.)*
 
 ---
 

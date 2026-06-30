@@ -25,6 +25,8 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   // Only handle our own files; let Supabase / YouTube Kids go straight to network.
   if (url.origin !== location.origin) return;
+  // Never cache the runtime config endpoint — it must reflect current env vars.
+  if (url.pathname.startsWith("/api/")) return;
   e.respondWith(
     caches.match(e.request).then((hit) => hit || fetch(e.request).then((res) => {
       const copy = res.clone();
