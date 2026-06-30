@@ -767,7 +767,24 @@
 
   /* -------------------- service worker -------------------- */
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+    const hadController = !!navigator.serviceWorker.controller;
+    let refreshing = false;
+    // When a new version takes over, reload once so the latest code shows.
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadController || refreshing) return;
+      refreshing = true; window.location.reload();
+    });
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").then((reg) => {
+        reg.update();
+        reg.addEventListener("updatefound", () => {
+          const nw = reg.installing;
+          if (nw) nw.addEventListener("statechange", () => {
+            if (nw.state === "installed" && navigator.serviceWorker.controller) nw.postMessage("skipWaiting");
+          });
+        });
+      }).catch(() => {});
+    });
   }
 
   /* -------------------- go! -------------------- */
