@@ -692,7 +692,7 @@
     const built = WEEKS.flatMap(w => w.lessons).filter(l => LESSONS[l.id]);
     const ov = overlay(`
       <h2>Lesson videos</h2>
-      <p class="tiny">Paste a <b>YouTube Kids</b> link for any lesson (from youtubekids.com). Leave blank to use the safe default search link.</p>
+      <p class="tiny">Each lesson already links straight to a hand-picked <b>YouTube Kids</b> video. Paste a different youtubekids.com link to override any of them; leave blank to keep the built-in one.</p>
       <div id="vlist"></div>
       <button class="btn" id="vsave">Save videos</button>
       <button class="btn ghost" id="vcancel">Cancel</button>
