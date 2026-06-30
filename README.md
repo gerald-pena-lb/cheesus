@@ -1,9 +1,10 @@
-# 🧀 Cheesus — A Faith Adventure
+# ✝️ Anima Christi — A Faith Adventure
 
 A fun, rewarding Bible-learning app for kids, focused on the Catholic faith:
 the New Testament with highlights of the Old Testament, Mother Mary, the
-saints, and the Church today. Tablet-first. Earns **Philippine Pesos (₱)** that
-can be exchanged for **parent-approved real-world rewards**.
+saints, and the Church today. Each child picks a **chibi Saint Buddy** who
+cheers them on with personality and sound. Works on **iPad and iPhone**. Earns
+**Philippine Pesos (₱)** exchangeable for **parent-approved real-world rewards**.
 
 > Built as a no-build, offline-capable web app (PWA). No accounts, no ads, no
 > tracking. See `PLAN.md` for the full design.
@@ -114,14 +115,18 @@ Both devices then share one synced profile, keyed by your secret family code.
 
 ```
 index.html              app shell
-css/styles.css          all styling
+css/styles.css          all styling (responsive: iPhone + iPad)
 js/data.js              CONTENT — curriculum, lessons, rewards, economy
-js/app.js               app logic (navigation, quizzes, pesos, parent zone)
+js/buddies.js           chibi Saint Buddies (data + SVG avatars)
+js/sound.js             Web Audio sound effects (no files, offline)
+js/app.js               app logic (navigation, quizzes, pesos, profile, parent zone)
 js/config.js            optional Supabase keys (blank = on-device)
 js/sync.js              optional cloud sync
+api/config.js           reads Supabase keys from Vercel env vars
 manifest.webmanifest    PWA install info
 sw.js                   offline service worker
 icon.svg                app icon
 supabase/schema.sql     database setup for cloud sync
+DEPLOY.md               step-by-step Vercel + Supabase deployment
 PLAN.md                 full project plan
 ```

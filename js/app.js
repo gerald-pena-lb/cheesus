@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Cheesus — application logic
+   Anima Christi — application logic
    ========================================================================== */
 (function () {
   "use strict";
@@ -10,7 +10,7 @@
   const KEY = "cheesus_state_v1";
   const DEFAULT_STATE = () => ({
     name: "",
-    avatar: "🐣",
+    buddy: "",              // saint buddy id
     pesos: 0,
     streak: { count: 0, last: "" },
     week: { key: "", earned: 0 },
@@ -84,6 +84,10 @@
     return null;
   }
   function videoUrl(id) { return state.videos[id] || (LESSONS[id] && LESSONS[id].video) || ""; }
+  function buddyCheer() {
+    const s = getSaint(state.buddy); const c = s.cheers || ["Great job!"];
+    return c[Math.floor(Math.random() * c.length)];
+  }
 
   /* -------------------- navigation -------------------- */
   let view = { name: "home", data: null };
@@ -98,6 +102,7 @@
     const body = {
       home: renderHome, lesson: renderLesson, quiz: renderQuiz,
       result: renderResult, store: renderStore, badges: renderBadges,
+      profile: renderProfile,
     }[view.name] || renderHome;
     app.innerHTML = topbar() + `<div id="screen"></div>`;
     $("#screen").innerHTML = "";
@@ -106,48 +111,67 @@
   }
 
   function topbar() {
+    const buddy = state.buddy ? `<button class="buddybtn" id="profileBtn" title="My profile">${chibiSVG(state.buddy, 34)}</button>` : "";
+    const sIcon = (window.Sound && Sound.isMuted()) ? "🔇" : "🔊";
     return `<div class="topbar">
-      <div class="brand"><span class="logo">🧀</span> Cheesus</div>
+      ${buddy}
+      <div class="brand">Anima&nbsp;Christi</div>
       <div class="spacer"></div>
-      <div class="streak" title="Day streak">🔥 ${state.streak.count}</div>
+      <button class="iconbtn" id="soundBtn" title="Sound on/off">${sIcon}</button>
       <div class="coin">${ECONOMY.currencySymbol} ${state.pesos}</div>
       <button class="iconbtn" id="parentBtn" title="Parent Zone">👪</button>
     </div>`;
   }
   function bindTop() {
     const p = $("#parentBtn"); if (p) p.onclick = openParentGate;
+    const pr = $("#profileBtn"); if (pr) pr.onclick = () => go("profile");
+    const sb = $("#soundBtn"); if (sb) sb.onclick = () => { const m = Sound.toggle(); sb.textContent = m ? "🔇" : "🔊"; };
   }
 
-  /* -------------------- welcome / profile -------------------- */
+  /* -------------------- welcome -------------------- */
   function renderWelcome() {
-    const avatars = ["🐣","🦁","🐰","🦄","🐯","🐼","🦊","🐨","🐝"];
     app.innerHTML = `
       <div class="scene scene-royal" style="margin-top:24px">
-        <div class="big">🧀</div>
-        <h2>Welcome to Cheesus!</h2>
-        <p style="font-weight:800;opacity:.95">A fun adventure through the Bible.</p>
+        <div class="big">✝️</div>
+        <h2>Anima Christi</h2>
+        <p style="font-weight:800;opacity:.95">A fun adventure through the Bible — with a saint buddy by your side!</p>
       </div>
       <div class="card">
         <div class="field"><label>What's your name?</label>
           <input id="nm" placeholder="Type your name" maxlength="20"/></div>
-        <label class="tiny" style="font-weight:800">Pick your buddy</label>
-        <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:6px" id="avs">
-          ${avatars.map(a => `<button class="reward" data-a="${a}" style="padding:10px"><div class="emoji">${a}</div></button>`).join("")}
+        <label class="tiny" style="font-weight:900;font-size:14px;color:var(--purple-d)">Choose your Saint Buddy 😇</label>
+        <div class="buddy-grid" id="avs">
+          ${SAINTS.map(s => buddyChoice(s)).join("")}
         </div>
+        <div id="buddyInfo" class="buddy-info hidden"></div>
         <button class="btn" id="startBtn">Start my journey ✨</button>
       </div>`;
-    let picked = "🐣";
-    document.querySelectorAll("#avs [data-a]").forEach(b => b.onclick = () => {
-      picked = b.dataset.a;
-      document.querySelectorAll("#avs [data-a]").forEach(x => x.style.outline = "");
-      b.style.outline = "4px solid var(--purple)";
+    let picked = "";
+    const info = $("#buddyInfo");
+    document.querySelectorAll("#avs [data-s]").forEach(b => b.onclick = () => {
+      picked = b.dataset.s;
+      document.querySelectorAll("#avs [data-s]").forEach(x => x.classList.remove("sel"));
+      b.classList.add("sel");
+      const s = getSaint(picked);
+      if (window.Sound) Sound.buddy(s.motif);
+      info.classList.remove("hidden");
+      info.innerHTML = `<div class="bi-title">${escapeH(s.full)}</div>
+        <div class="bi-sub">“${escapeH(s.title)}”</div>
+        <div class="bi-p">${escapeH(s.personality)}</div>`;
     });
     $("#startBtn").onclick = () => {
       const v = $("#nm").value.trim();
-      if (!v) { $("#nm").focus(); return; }
-      state.name = v; state.avatar = picked; save();
-      go("home");
+      if (!v) { toast("Please type your name first 🙂"); $("#nm").focus(); return; }
+      if (!picked) { toast("Pick a saint buddy to join you! 😇"); return; }
+      state.name = v; state.buddy = picked; save();
+      const s = getSaint(picked);
+      go("home"); toast(`${s.name} is now your buddy! ${s.attr}`);
+      if (window.Sound) Sound.reward();
     };
+  }
+  function buddyChoice(s) {
+    return `<button class="buddy-choice" data-s="${s.id}">
+      ${chibiSVG(s.id, 72)}<div class="bc-name">${escapeH(s.name)}</div></button>`;
   }
 
   /* -------------------- HOME / journey -------------------- */
@@ -179,7 +203,14 @@
         <button class="tab" id="tabBadges">🏅 Badges</button>
       </div>
 
-      <div class="sec-title">Hi ${state.avatar} ${escapeH(state.name)}! &nbsp;<span class="tiny">${doneLessons}/${totalLessons} lessons</span></div>
+      <div class="greet">
+        <div class="greet-buddy">${chibiSVG(state.buddy, 56)}</div>
+        <div class="greet-text">
+          <div class="greet-hi">Hi ${escapeH(state.name)}! <span class="streak-mini">🔥 ${state.streak.count}</span></div>
+          <div class="greet-cheer">${escapeH(buddyCheer())}</div>
+        </div>
+      </div>
+      <div class="sec-title" style="font-size:16px">📖 Your Journey <span class="tiny">&nbsp;${doneLessons}/${totalLessons} lessons</span></div>
       <div id="journey"></div>
     `;
     $("#tabStore").onclick = () => go("store");
@@ -273,7 +304,7 @@
       <div class="card">
         <div class="tiny" style="font-weight:900">Question ${d.q + 1} of ${L.quiz.length}</div>
         <div class="q-prompt">${escapeH(Q.q)}</div>
-        <div id="opts">${Q.options.map((o, i) => `<button class="opt" data-i="${i}">${escapeH(o)}</button>`).join("")}</div>
+        <div id="opts">${Q.options.map((o, i) => `<button class="opt" data-i="${i}" data-nosound="1">${escapeH(o)}</button>`).join("")}</div>
         <div id="fb"></div>
         <button class="btn green hidden" id="cont">Continue →</button>
       </div>`;
@@ -288,6 +319,7 @@
         x.classList.add(xi === Q.answer ? "correct" : (xi === i ? "wrong" : "dim"));
       });
       if (right) d.correct++;
+      if (window.Sound) (right ? Sound.correct() : Sound.wrong());
       $("#fb").innerHTML = `<div class="feedback ${right ? "ok" : "no"}">
         ${right ? "✅ Correct! " : "💡 Good try! "} ${escapeH(Q.explain)}</div>`;
       const cont = $("#cont"); cont.classList.remove("hidden");
@@ -330,13 +362,15 @@
     if (!prev || d.correct > prev.correct) state.completed[d.id] = { correct: d.correct, total };
 
     save();
-    go("result", { id: d.id, correct: d.correct, total, earned, perfect, streakBonus, newBadges });
+    go("result", { id: d.id, correct: d.correct, total, earned, perfect, streakBonus, newBadges, cheer: buddyCheer() });
     confetti();
+    if (window.Sound) { newBadges.length ? Sound.badge() : Sound.reward(); }
   }
 
   function renderResult() {
     const d = view.data; const meta = lessonMeta(d.id);
     const s = $("#screen");
+    const buddy = getSaint(state.buddy);
     const stars = "⭐".repeat(d.correct) + "▪️".repeat(d.total - d.correct);
     const badgeHtml = d.newBadges.length
       ? `<div class="card center"><div class="tiny" style="font-weight:900">NEW BADGE!</div>
@@ -349,6 +383,10 @@
         <div style="font-size:24px;margin:6px 0">${stars}</div>
         <div class="earn-pill">+ ${ECONOMY.currencySymbol}${d.earned}</div>
         <div class="tiny">You got ${d.correct} of ${d.total} right${d.streakBonus ? ` • +${ECONOMY.currencySymbol}${d.streakBonus} daily streak bonus 🔥` : ""}</div>
+      </div>
+      <div class="buddy-say">
+        ${chibiSVG(state.buddy, 64)}
+        <div class="bubble">${escapeH(d.cheer || buddy.cheers[0])}</div>
       </div>
       ${badgeHtml}
       <button class="btn" id="more">Back to my journey 📖</button>
@@ -413,6 +451,66 @@
             <div class="tiny">${got ? escapeH(b.desc) : "Locked"}</div></div>`; }).join("")}
       </div>`;
     $("#back").onclick = () => go("home");
+  }
+
+  /* -------------------- PROFILE -------------------- */
+  function renderProfile() {
+    const s = $("#screen");
+    const b = getSaint(state.buddy);
+    const doneLessons = Object.keys(state.completed).length;
+    const perfects = Object.values(state.completed).filter(c => c.correct === c.total).length;
+    s.innerHTML = `
+      <button class="backbtn" id="back">← Back</button>
+      <div class="profile-hero scene-royal">
+        <div class="ph-chibi">${chibiSVG(state.buddy, 120)}</div>
+        <div class="ph-name">${escapeH(state.name)}</div>
+        <div class="ph-buddy">with ${escapeH(b.full)}</div>
+      </div>
+      <div class="card">
+        <div class="bi-sub" style="text-align:center">“${escapeH(b.title)}” • Feast day ${escapeH(b.feast || "")}</div>
+        <p class="read" style="margin-top:8px"><span style="font-size:16px">${escapeH(b.personality)}</span></p>
+        <div class="bubble center" style="margin-top:10px">${escapeH(b.cheers[0])}</div>
+        <button class="btn ghost" id="changeBuddy">😇 Choose a different buddy</button>
+      </div>
+      <div class="card">
+        <div class="mini-stat"><span>🪙 Total ${ECONOMY.currencyName}</span><span>${ECONOMY.currencySymbol}${state.pesos}</span></div>
+        <div class="mini-stat"><span>🎯 This week</span><span>${ECONOMY.currencySymbol}${state.week.earned} / ${ECONOMY.weeklyTarget}</span></div>
+        <div class="mini-stat"><span>📖 Lessons done</span><span>${doneLessons}</span></div>
+        <div class="mini-stat"><span>💯 Perfect quizzes</span><span>${perfects}</span></div>
+        <div class="mini-stat"><span>🔥 Day streak</span><span>${state.streak.count}</span></div>
+        <div class="mini-stat"><span>🏅 Badges</span><span>${state.badges.length}/${BADGES.length}</span></div>
+      </div>`;
+    $("#back").onclick = () => go("home");
+    $("#changeBuddy").onclick = () => chooseBuddyDialog();
+  }
+
+  function chooseBuddyDialog() {
+    const ov = overlay(`
+      <h2>Choose your Saint Buddy 😇</h2>
+      <div class="buddy-grid" id="cb"></div>
+      <div id="cbInfo" class="buddy-info hidden"></div>
+      <button class="btn" id="cbsave">Choose this buddy</button>
+      <button class="btn ghost" id="cbcancel">Cancel</button>
+    `);
+    const grid = ov.querySelector("#cb");
+    grid.innerHTML = SAINTS.map(s => `<button class="buddy-choice ${s.id === state.buddy ? "sel" : ""}" data-s="${s.id}">${chibiSVG(s.id, 64)}<div class="bc-name">${escapeH(s.name)}</div></button>`).join("");
+    let picked = state.buddy;
+    const info = ov.querySelector("#cbInfo");
+    function showInfo(id) { const s = getSaint(id); info.classList.remove("hidden");
+      info.innerHTML = `<div class="bi-title">${escapeH(s.full)}</div><div class="bi-sub">“${escapeH(s.title)}”</div><div class="bi-p">${escapeH(s.personality)}</div>`; }
+    showInfo(picked);
+    grid.querySelectorAll("[data-s]").forEach(btn => btn.onclick = () => {
+      picked = btn.dataset.s;
+      grid.querySelectorAll("[data-s]").forEach(x => x.classList.remove("sel"));
+      btn.classList.add("sel"); showInfo(picked);
+      if (window.Sound) Sound.buddy(getSaint(picked).motif);
+    });
+    ov.querySelector("#cbcancel").onclick = () => ov.remove();
+    ov.querySelector("#cbsave").onclick = () => {
+      state.buddy = picked; save(); ov.remove();
+      const s = getSaint(picked); toast(`${s.name} is now your buddy! ${s.attr}`);
+      render();
+    };
   }
 
   /* ============================================================
@@ -599,6 +697,16 @@
     render();
   }
   if (window.Sync) Sync.init(() => state, applyRemote);
+
+  /* -------------------- global click sounds -------------------- */
+  // Browsers need a user gesture before audio can play — unlock on first tap.
+  document.addEventListener("pointerdown", () => { if (window.Sound) Sound.unlock(); }, { once: true });
+  document.addEventListener("click", (e) => {
+    if (!window.Sound) return;
+    const el = e.target.closest("button, .lesson-row, .reward, .buddy-choice, a.video-btn");
+    if (!el || el.classList.contains("opt") || el.dataset.nosound) return;
+    Sound.click();
+  }, true);
 
   /* -------------------- service worker -------------------- */
   if ("serviceWorker" in navigator) {

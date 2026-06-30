@@ -213,4 +213,67 @@ h1,h2,h3{ margin:0; line-height:1.15; }
 .celebrate h2{ font-size:26px; color:var(--purple-d); margin:8px 0; }
 .earn-pill{ display:inline-flex; align-items:center; gap:8px; background:linear-gradient(180deg,var(--gold),var(--gold-d)); color:#5a3d00; font-weight:900; font-size:22px; padding:10px 22px; border-radius:999px; margin:10px 0; }
 
-@media (max-width:380px){ .grid{ grid-template-columns:1fr; } .badge-grid{ grid-template-columns:repeat(2,1fr);} }
+/* ---------- Chibi buddies ---------- */
+.chibi-svg{ display:block; filter:drop-shadow(0 4px 6px rgba(91,33,182,.2)); }
+.buddybtn{ background:#fff; border-radius:14px; padding:2px 4px 0; box-shadow:var(--shadow); display:grid; place-items:center; line-height:0; }
+.buddybtn .chibi-svg{ filter:none; }
+
+.buddy-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0 4px; }
+.buddy-choice{ background:#faf8ff; border:3px solid var(--line); border-radius:16px; padding:8px 4px 4px; display:flex; flex-direction:column; align-items:center; }
+.buddy-choice.sel{ border-color:var(--purple); background:#f1e9ff; transform:translateY(-2px); }
+.bc-name{ font-weight:900; font-size:11px; color:var(--ink); margin-top:2px; line-height:1.1; }
+.buddy-info{ background:#f7f2ff; border-radius:16px; padding:14px; margin:10px 0; }
+.bi-title{ font-weight:900; color:var(--purple-d); font-size:17px; }
+.bi-sub{ font-weight:800; color:var(--gold-d); font-size:13px; margin:2px 0 6px; }
+.bi-p{ font-weight:600; font-size:15px; line-height:1.5; }
+
+/* greeting on home */
+.greet{ display:flex; align-items:center; gap:12px; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:12px 16px; margin-bottom:6px; }
+.greet-buddy{ flex:0 0 auto; line-height:0; }
+.greet-hi{ font-weight:900; font-size:18px; color:var(--purple-d); display:flex; align-items:center; gap:8px; }
+.streak-mini{ font-size:13px; color:#c2410c; background:#fff3e6; padding:2px 8px; border-radius:999px; }
+.greet-cheer{ font-weight:700; color:var(--muted); font-size:14px; margin-top:2px; }
+
+/* buddy speaking (result screen) */
+.buddy-say{ display:flex; align-items:center; gap:10px; justify-content:center; margin:6px 0 4px; }
+.bubble{ position:relative; background:#fff; border:2px solid var(--line); border-radius:16px; padding:12px 16px; font-weight:800; color:var(--ink); box-shadow:var(--shadow); max-width:70%; }
+.buddy-say .bubble::before{ content:""; position:absolute; left:-10px; top:50%; transform:translateY(-50%); border:8px solid transparent; border-right-color:#fff; }
+
+/* profile */
+.profile-hero{ border-radius:var(--radius); padding:20px; text-align:center; color:#fff; box-shadow:var(--shadow); margin-top:10px; }
+.profile-hero .chibi-svg{ margin:0 auto; }
+.ph-name{ font-size:24px; font-weight:900; margin-top:6px; text-shadow:0 2px 6px rgba(0,0,0,.2); }
+.ph-buddy{ font-weight:800; opacity:.95; }
+
+/* ============ RESPONSIVE ============ */
+/* iPhone & small phones */
+@media (max-width:520px){
+  #app{ padding-left:12px; padding-right:12px; }
+  .brand{ font-size:18px; }
+  .coin{ font-size:16px; padding:7px 11px; }
+  .iconbtn{ width:42px; height:42px; font-size:20px; }
+  .grid{ grid-template-columns:1fr 1fr; }
+  .scene .big{ font-size:60px; }
+  .scene h2{ font-size:21px; }
+  .read p{ font-size:16px; }
+  .q-prompt{ font-size:18px; }
+  .opt{ font-size:16px; padding:14px; }
+  .bubble{ max-width:64%; font-size:14px; padding:10px 13px; }
+}
+@media (max-width:400px){
+  .buddy-grid{ grid-template-columns:repeat(3,1fr); }
+  .grid{ grid-template-columns:1fr; }
+  .badge-grid{ grid-template-columns:repeat(2,1fr); }
+  .pin-row input{ width:46px; height:54px; font-size:22px; }
+  .brand{ font-size:16px; }
+}
+/* iPad & up: a touch more breathing room */
+@media (min-width:700px){
+  #app{ padding-left:24px; padding-right:24px; }
+  .read p{ font-size:18px; }
+  .buddy-grid{ grid-template-columns:repeat(6,1fr); }
+}
+/* landscape phones / short screens: keep scenes compact */
+@media (max-height:520px) and (orientation:landscape){
+  .scene{ padding:18px; } .scene .big{ font-size:48px; }
+}

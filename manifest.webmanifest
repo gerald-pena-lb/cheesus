@@ -1,7 +1,7 @@
 {
-  "name": "Cheesus — A Faith Adventure",
-  "short_name": "Cheesus",
-  "description": "A fun, rewarding Bible-learning adventure for kids.",
+  "name": "Anima Christi — A Faith Adventure",
+  "short_name": "Anima Christi",
+  "description": "A fun, rewarding Bible-learning adventure for kids, with chibi saint buddies.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

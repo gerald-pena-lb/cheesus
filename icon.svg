@@ -1,24 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#db2777"/>
+      <stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#2563eb"/>
     </linearGradient>
-    <linearGradient id="cheese" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffd23f"/><stop offset="1" stop-color="#f5a800"/>
+    <radialGradient id="glow" cx="50%" cy="46%" r="55%">
+      <stop offset="0" stop-color="#fff7d6" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#fff7d6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heart" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff6b8b"/><stop offset="1" stop-color="#e11d48"/>
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <!-- halo -->
-  <ellipse cx="256" cy="120" rx="120" ry="34" fill="none" stroke="#fff3b0" stroke-width="14" opacity="0.9"/>
-  <!-- cheese wedge -->
-  <path d="M120 360 L392 300 Q406 297 404 312 L386 392 Q384 404 372 402 L132 388 Q116 387 116 372 Z"
-        fill="url(#cheese)" stroke="#d98a00" stroke-width="8" stroke-linejoin="round"/>
-  <circle cx="200" cy="352" r="16" fill="#fff" opacity="0.85"/>
-  <circle cx="280" cy="338" r="12" fill="#fff" opacity="0.85"/>
-  <circle cx="340" cy="356" r="10" fill="#fff" opacity="0.85"/>
-  <!-- little cross on top -->
+  <circle cx="256" cy="248" r="190" fill="url(#glow)"/>
+  <!-- rays -->
+  <g stroke="#ffe066" stroke-width="10" stroke-linecap="round" opacity="0.9">
+    <line x1="256" y1="70" x2="256" y2="120"/>
+    <line x1="256" y1="376" x2="256" y2="426"/>
+    <line x1="70" y1="248" x2="120" y2="248"/>
+    <line x1="392" y1="248" x2="442" y2="248"/>
+    <line x1="123" y1="115" x2="158" y2="150"/>
+    <line x1="354" y1="346" x2="389" y2="381"/>
+    <line x1="389" y1="115" x2="354" y2="150"/>
+    <line x1="158" y1="346" x2="123" y2="381"/>
+  </g>
+  <!-- sacred heart -->
+  <path d="M256 360 C150 286 168 196 224 196 C250 196 256 218 256 218 C256 218 262 196 288 196 C344 196 362 286 256 360 Z"
+        fill="url(#heart)" stroke="#9f1239" stroke-width="6"/>
+  <!-- flame -->
+  <path d="M256 150 C246 176 268 184 256 210 C282 196 280 168 256 150 Z" fill="#ffb703" stroke="#fb8500" stroke-width="3"/>
+  <!-- cross over heart -->
   <g fill="#ffffff">
-    <rect x="246" y="150" width="20" height="70" rx="6"/>
-    <rect x="226" y="172" width="60" height="20" rx="6"/>
+    <rect x="247" y="238" width="18" height="86" rx="6"/>
+    <rect x="226" y="262" width="60" height="18" rx="6"/>
   </g>
 </svg>

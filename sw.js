@@ -1,5 +1,5 @@
 /* Cheesus service worker — offline app shell */
-const CACHE = "cheesus-v1";
+const CACHE = "anima-christi-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -7,6 +7,8 @@ const ASSETS = [
   "./icon.svg",
   "./css/styles.css",
   "./js/data.js",
+  "./js/buddies.js",
+  "./js/sound.js",
   "./js/config.js",
   "./js/sync.js",
   "./js/app.js",
